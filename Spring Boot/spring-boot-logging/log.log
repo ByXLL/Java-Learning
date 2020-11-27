@@ -1,0 +1,11 @@
+2020-11-25 21:23:12.409 ===== [main] INFO  c.e.springboot.SpringBootLoggingApplicationTests - Starting SpringBootLoggingApplicationTests using Java 1.8.0_191 on BF-201812140940 with PID 400744 (started by Administrator in C:\By_HJL\Projects\Java-Projects\Java-Learning\Spring Boot\spring-boot-logging)
+2020-11-25 21:23:12.410 ===== [main] DEBUG c.e.springboot.SpringBootLoggingApplicationTests - Running with Spring Boot v2.4.0, Spring v5.3.1
+2020-11-25 21:23:12.416 ===== [main] INFO  c.e.springboot.SpringBootLoggingApplicationTests - No active profile set, falling back to default profiles: default
+2020-11-25 21:23:13.515 ===== [main] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+2020-11-25 21:23:13.861 ===== [main] INFO  c.e.springboot.SpringBootLoggingApplicationTests - Started SpringBootLoggingApplicationTests in 1.877 seconds (JVM running for 3.351)
+2020-11-25 21:23:14.094 ===== [main] DEBUG c.e.springboot.SpringBootLoggingApplicationTests - 这是debug日志
+2020-11-25 21:23:14.094 ===== [main] TRACE c.e.springboot.SpringBootLoggingApplicationTests - 这是trace日志
+2020-11-25 21:23:14.094 ===== [main] INFO  c.e.springboot.SpringBootLoggingApplicationTests - 这是info日志
+2020-11-25 21:23:14.095 ===== [main] WARN  c.e.springboot.SpringBootLoggingApplicationTests - 这是warn日志
+2020-11-25 21:23:14.095 ===== [main] ERROR c.e.springboot.SpringBootLoggingApplicationTests - 这是error日志
+2020-11-25 21:23:14.115 ===== [SpringContextShutdownHook] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'

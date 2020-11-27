@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/APIS/APIS.iml" filepath="$PROJECT_DIR$/APIS/APIS.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AnonyMousClass/AnonyMousClass.iml" filepath="$PROJECT_DIR$/AnonyMousClass/AnonyMousClass.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Array/Array.iml" filepath="$PROJECT_DIR$/Array/Array.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ArrayList/ArrayList.iml" filepath="$PROJECT_DIR$/ArrayList/ArrayList.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ChouxiangClass/ChouxiangClass.iml" filepath="$PROJECT_DIR$/ChouxiangClass/ChouxiangClass.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CollectionDemo/CollectionDemo.iml" filepath="$PROJECT_DIR$/CollectionDemo/CollectionDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DuoTaiDemo/DuoTaiDemo.iml" filepath="$PROJECT_DIR$/DuoTaiDemo/DuoTaiDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ExtendDemo/ExtendDemo.iml" filepath="$PROJECT_DIR$/ExtendDemo/ExtendDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FileOutputStreamDemo/FileOutputStreamDemo.iml" filepath="$PROJECT_DIR$/FileOutputStreamDemo/FileOutputStreamDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HashMapDemo/HashMapDemo.iml" filepath="$PROJECT_DIR$/HashMapDemo/HashMapDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/InterfaceDemo/InterfaceDemo.iml" filepath="$PROJECT_DIR$/InterfaceDemo/InterfaceDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/String/String.iml" filepath="$PROJECT_DIR$/String/String.iml" />
+      <module fileurl="file://$PROJECT_DIR$/StudentManager/StudentManager.iml" filepath="$PROJECT_DIR$/StudentManager/StudentManager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ThreadDemo/ThreadDemo.iml" filepath="$PROJECT_DIR$/ThreadDemo/ThreadDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TreeSetDemo/TreeSetDemo.iml" filepath="$PROJECT_DIR$/TreeSetDemo/TreeSetDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Utils/Utils.iml" filepath="$PROJECT_DIR$/Utils/Utils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/idea_test/idea_test.iml" filepath="$PROJECT_DIR$/idea_test/idea_test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/myClass/myClass.iml" filepath="$PROJECT_DIR$/myClass/myClass.iml" />
+    </modules>
+  </component>
+</project>

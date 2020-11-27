@@ -1,0 +1,15 @@
+server:
+  port: 8081
+
+
+#person:
+#  name: 张三
+#  age: 20
+#  isBoss: true
+#  maps: {k1: {k11: v1},k2: {k22: v2}}
+#  list:
+#    - list1
+#    - list2
+#  dog:
+#    name: 小狗
+#    age: 10
