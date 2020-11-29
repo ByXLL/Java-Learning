@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class SpringBootLoggingApplicationTests {
     //  创建一个记录器
     Logger logger = LoggerFactory.getLogger(getClass());
+
     @Test
     void contextLoads() {
         logger.debug("这是debug日志");
