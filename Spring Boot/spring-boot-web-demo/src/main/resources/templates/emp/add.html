@@ -50,40 +50,49 @@
 				<div th:replace="commons/bar::nav-left-bar(activeUri ='getEmps')"></div>
 
 				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-					<h2><a href="emp" th:href="@{/emp}" class="btn btn-sm btn-success">添加员工</a></h2>
-					<div class="table-responsive">
-						<table class="table table-striped table-sm">
-							<thead>
-								<tr>
-									<th>#</th>
-									<th>姓名</th>
-									<th>邮箱</th>
-									<th>性别</th>
-									<th>部门</th>
-									<th>出生日期</th>
-									<th>操作</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr th:each="emp : ${employees}">
-									<td th:text="${emp.id}"></td>
-									<td th:text="${emp.lastName}"></td>
-									<td th:text="${emp.email}"></td>
-									<td th:text="${emp.gender} == 0 ? '女':'男'"></td>
-									<td th:text="${emp.department.departmentName}"></td>
-									<td th:text="${#dates.format(emp.birth,'yyyy-MM-dd')}"></td>
-									<td>
-<!--										<a class="btn btn-sm btn-primary" th:href="@{/getEmpById/}+${emp.id}">编辑</a>-->
-										<a class="btn btn-sm btn-primary" th:href="@{/getEmpById(id=${emp.id})}">编辑</a>
-										<form th:action="@{/deleteEmp(id=${emp.id})}" method="post" style="display: inline-block;">
-											<input type="hidden" name="_method" value="delete">
-											<button type="submit" class="btn btn-sm btn-danger">删除</button>
-										</form>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
+
+					<h2><a href="emp" th:href="@{/getEmps}" class="btn btn-sm btn-success">返回列表页</a></h2>
+
+					<form th:action="@{updateEmp}" method="post">
+						<!-- 发送put请求修改员工数据 -->
+						<!--
+							springMvc 中配置HiddenHttpMethodFilter
+							页面创建一个post表单
+							创建一个input项， name="_method" 就是我们指定的请求方式
+						-->
+						<input type="hidden" name="_method" value="put" th:if="${empInfo!=null}">
+						<input type="hidden" name="id" th:value="${empInfo.id}" th:if="${empInfo!=null}">
+						<div class="form-group">
+							<label>姓名</label>
+							<input type="text" name="lastName" class="form-control" placeholder="请输入姓名" th:value="${empInfo!=null}? ${empInfo.lastName}">
+						</div>
+						<div class="form-group">
+							<label>邮箱</label>
+							<input type="email" name="email" class="form-control" placeholder="请输入邮箱" th:value="${empInfo!=null}? ${empInfo.email}">
+						</div>
+						<div class="form-group">
+							<label>性别</label><br/>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="gender" value="1" th:checked="${empInfo!=null}? ${empInfo.gender} == 1">
+								<label class="form-check-label">男</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="gender" value="0" th:checked="${empInfo!=null}? ${empInfo.gender} == 0">
+								<label class="form-check-label">女</label>
+							</div>
+						</div>
+						<div class="form-group">
+							<label>部门</label>
+							<select class="form-control" name="department.id">
+								<option th:each="dept:${depts}" th:value="${dept.id}" th:text="${dept.departmentName}" th:selected="${empInfo!=null} ? ${dept.id == empInfo.department.id}"></option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label>出生日期</label>
+							<input type="text" name="birth" class="form-control" placeholder="请输入出生日期" th:value="${empInfo!=null}? ${#dates.format(empInfo.birth,'yyyy-MM-dd')}">
+						</div>
+						<button type="submit" class="btn btn-primary" th:text="${empInfo!=null} ? '确认修改' : '添加'">添加</button>
+					</form>
 				</main>
 			</div>
 		</div>

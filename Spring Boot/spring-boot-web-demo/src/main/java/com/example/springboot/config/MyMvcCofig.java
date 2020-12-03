@@ -25,13 +25,14 @@ public class MyMvcCofig implements WebMvcConfigurer  {
     public WebMvcConfigurer webMvcConfigurer() {
         WebMvcConfigurer webMvcConfigurer = new WebMvcConfigurer(){
 
-            // 注册拦截器
-            @Override
-            public void addInterceptors(InterceptorRegistry registry) {
-                // 添加我们定义的登录拦截器  拦截全部请求  并排除登录页的请求
-                // springBoot 对静态资源做了处理，不会影响静态资源的访问
-                registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**").excludePathPatterns("/","/index.html","/login","/user/login");
-            }
+//            // 注册拦截器
+//            @Override
+//            public void addInterceptors(InterceptorRegistry registry) {
+//                // 添加我们定义的登录拦截器  拦截全部请求  并排除登录页的请求
+//                // springBoot 对静态资源做了处理，不会影响静态资源的访问
+//                registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**").excludePathPatterns("/","/index.html","/login","/user/login",
+//                        "/asserts/**");
+//            }
 
             // ctrl + o
             @Override
