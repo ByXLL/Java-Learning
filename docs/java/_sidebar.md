@@ -9,11 +9,11 @@
 
 * JAVA
 
-  * [修饰符](Java/modifier.md)
-  * [面向对象](Java/oop.md)
-  * [Spring Boot 基础](Java/Spring-Boot.md)
-  * [Spring Boot Web](Java/spring-boot-web.md)
-  * [JDBC](Java/spring-boot-data-jdbc.md)
+  * [修饰符](java/modifier.md)
+  * [面向对象](java/oop.md)
+  * [Spring Boot 基础](java/Spring-Boot.md)
+  * [Spring Boot Web](java/spring-boot-web.md)
+  * [JDBC](java/spring-boot-data-jdbc.md)
 
   
 
