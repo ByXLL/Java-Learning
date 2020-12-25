@@ -14,20 +14,20 @@ import java.util.List;
 @ContextConfiguration
 @SpringBootTest
 class CommunityApplicationTests {
-    @Autowired
-    private DiscussPostMapper discussPostMapper;
-    @Autowired
-    private UserMapper userMapper;
+//    @Autowired
+//    private DiscussPostMapper discussPostMapper;
+//    @Autowired
+//    private UserMapper userMapper;
 
     @Test
     void contextLoads() {
     }
 
-    @Test
-    public void testDiscussPostMapper() {
-        List<DiscussPost> list = discussPostMapper.selectDiscussPosts(0,0,10);
-        for (DiscussPost post :list){
-            System.out.println(post);
-        }
-    }
+//    @Test
+//    public void testDiscussPostMapper() {
+//        List<DiscussPost> list = discussPostMapper.selectDiscussPosts(0,0,10);
+//        for (DiscussPost post :list){
+//            System.out.println(post);
+//        }
+//    }
 }

@@ -203,7 +203,63 @@
 
 ### 静态文件处理
 
+> 将`css`、`images`、`js`，等静态文件放到`resources/static`目录下
+>
+> 将MVC页面模板文件，放置在`resources/templates`目录下
+
+### 配置文件
+
+``` properties
+# ServerProperties
+server.port=8080
+server.servlet.context-path=/community
+
+# ThymeleafProperties	模板引擎配置
+spring.thymeleaf.cache=false
+
+# DataSourceProperties  数据源配置
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+spring.datasource.url=jdbc:mysql://127.0.0.1:3306/java_learning?characterEncoding=utf-8&useSSL=false&serverTimezone=Hongkong
+spring.datasource.username=username
+spring.datasource.password=password
+spring.datasource.type=com.alibaba.druid.pool.DruidDataSource
+spring.datasource.hikari.maximum-pool-size=15
+spring.datasource.hikari.minimum-idle=5
+spring.datasource.hikari.idle-timeout=30000
+
+# MybatisProperties
+# mapper 映射路径
+mybatis.mapper-locations=classpath:mapper/*.xml
+# 实体的映射路径
+mybatis.type-aliases-package=com.nowcoder.community.entity
+# 是否自增id
+mybatis.configuration.useGeneratedKeys=true
+# 大驼峰与下划线互转
+mybatis.configuration.mapUnderscoreToCamelCase=true
+
+# logger
+#logging.level.com.nowcoder.community=debug
+#logging.file=d:/work/data/nowcoder/community.log
+
+# MailProperties
+spring.mail.host=smtp.sina.com
+spring.mail.port=465
+spring.mail.username=nowcoder@sina.com
+spring.mail.password=nowcoder123
+spring.mail.protocol=smtps
+spring.mail.properties.mail.smtp.ssl.enable=true
+
+# community
+#community.path.domain=http://localhost:8080
+#community.path.upload=d:/work/data/upload
+```
 
 
-### 配置文件初始化
 
+## 首页
+
+> 首页用于展示帖子列表，并完成分页查看功能
+
+### 1.创建实体
+
+在entity文件夹下创建`DiscussPost` 实体，定义属性，并设置`getter、setter`方法，重写`toString()`
