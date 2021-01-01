@@ -5,19 +5,23 @@ import com.nowcoder.community.entity.User;
 import com.nowcoder.community.service.UserService;
 import com.nowcoder.community.util.CommunityConstant;
 import com.sun.deploy.net.HttpResponse;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.HttpCookie;
 import java.util.Map;
 
 @Controller
@@ -30,6 +34,9 @@ public class LoginController implements CommunityConstant {
     private UserService userService;
     @Autowired
     private Producer producer;
+
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
 
     @GetMapping("/register")
     public String getRegisterPage() {
@@ -83,6 +90,50 @@ public class LoginController implements CommunityConstant {
     @GetMapping("/login")
     public String getLoginPage() {
         return "/site/login";
+    }
+
+    // 登录操作
+    @PostMapping("/login")
+    public String login(Model model, HttpSession session, HttpServletResponse response, String username, String password, String code, Boolean rememberme) {
+        // 先校验验证码
+        String kaptcha = (String) session.getAttribute("kaptcha");
+        // equalsIgnoreCase 忽略大小写
+        if(StringUtils.isBlank(kaptcha) || StringUtils.isBlank(code) || !kaptcha.equalsIgnoreCase(code)) {
+            model.addAttribute("codeMsg","验证码错误");
+            return "/site/login";
+        }
+
+        // 根据是否勾选记住我 动态改变 登录凭证 生效时间
+        if(rememberme == null ) { rememberme = false ;}
+        int expiredSeconds = rememberme ? REMEMBER_EXPIRED_SECONDS : DEFAULT_EXPIRED_SECONDS;
+
+        // 检查账号密码
+        Map<String,Object> map = userService.login(username,password,expiredSeconds);
+        // 如果 map 对象中包含 ticket 则为登陆成功
+        if(map.containsKey("ticket")) {
+            // 实例化一个 Cookie 携带 ticket 返回给客户端
+            Cookie cookie = new Cookie("ticket",map.get("ticket").toString());
+            // 设置生效的路径
+            cookie.setPath(contextPath);
+            cookie.setMaxAge(expiredSeconds);
+
+            // 将cookie 注入到响应头中
+            response.addCookie(cookie);
+            // 登录成功 重定向到首页
+            return "redirect:/index";
+        }else {
+            // 接收 service 层返回的错误信息  并将错误信息 注入给页面中
+            model.addAttribute("usernameMsg",map.get("usernameMsg"));
+            model.addAttribute("passwordMsg",map.get("passwordMsg"));
+            return "/site/login";
+        }
+    }
+
+    // 退出登录
+    @GetMapping("/logout")
+    public String logout(@CookieValue("ticket") String ticket) {
+        userService.logout(ticket);
+        return "redirect:/login";
     }
 
     // 获取验证码

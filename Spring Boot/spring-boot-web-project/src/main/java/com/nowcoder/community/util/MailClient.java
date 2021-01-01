@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+/**
+ * 邮件服务
+ */
 @Component
 public class MailClient {
     // 声明日志 使用当前类命名

@@ -1,6 +1,8 @@
 package com.nowcoder.community.service;
 
+import com.nowcoder.community.dao.LoginTicketMapper;
 import com.nowcoder.community.dao.UserMapper;
+import com.nowcoder.community.entity.LoginTicket;
 import com.nowcoder.community.entity.User;
 import com.nowcoder.community.util.CommunityConstant;
 import com.nowcoder.community.util.CommunityUtil;
@@ -21,6 +23,9 @@ import java.util.Random;
 public class UserService implements CommunityConstant {
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private LoginTicketMapper loginTicketMapper;
 
     @Autowired
     private MailClient mailClient;
@@ -124,4 +129,76 @@ public class UserService implements CommunityConstant {
         }
     }
 
+
+    /***
+     * 登录
+     * @param username  用户名
+     * @param password  密码
+     * @param expiredSeconds    登录过期时间 /s
+     * @return
+     */
+    public Map<String,Object> login(String username, String password,int expiredSeconds) {
+        // 设置返回的数据格式 在controller层中通过 接收map 通过 .get(key) 获取对应返回的信息
+        Map<String,Object> map = new HashMap<>();
+
+        // 空值判断
+        if(StringUtils.isBlank(username)) {
+            map.put("usernameMsg","用户名不能为空");
+            return map;
+        }
+        if(StringUtils.isBlank(password)) {
+            map.put("passwordMsg","密码不能为空");
+            return map;
+        }
+
+        // 验证账号
+        User user = userMapper.selectByName(username);
+        if(user == null) {
+            map.put("usernameMsg","该用户不存在");
+            return map;
+        }
+        if(user.getStatus() == 0) {
+            map.put("usernameMsg","当前账号未激活");
+            return map;
+        }
+        // 将明文密码加上加密字段 然后进行md5 加密 判断是否和数据库中保存的一样
+        password = CommunityUtil.md5(password + user.getSalt());
+        System.out.println("校验的数据----"+password);
+        System.out.println("获取的数据-----"+user.getPassword());
+        if(!user.getPassword().equals(password)) {
+            map.put("passwordMsg","密码错误");
+            return map;
+        }
+
+
+        // 登录成功 生成登录凭证
+        LoginTicket loginTicket = new LoginTicket();
+        loginTicket.setUserId(user.getId());
+        loginTicket.setStatus(0);
+        loginTicket.setTicket(CommunityUtil.generateUUID());    // 生成随机 uuid 作为登录凭证信息
+        loginTicket.setExpired(new Date(System.currentTimeMillis() + expiredSeconds * 1000));   // 设置有效时间 当前系统时间 + 传进来的偏移量
+
+        loginTicketMapper.insertLoginTicket(loginTicket);
+
+        // 向页面控制器层登录凭证
+        map.put("ticket",loginTicket.getTicket());
+        return map;
+    }
+
+    /**
+     * 退出 修改用户登录的凭证
+     * @param ticket
+     */
+    public void logout(String ticket) {
+        loginTicketMapper.updateStatus(ticket, 1);
+    }
+
+    /**
+     * 获取登录凭证
+     * @param ticket
+     * @return
+     */
+    public LoginTicket findLoginTicket(String ticket) {
+        return  loginTicketMapper.selectByTicket(ticket);
+    }
 }
