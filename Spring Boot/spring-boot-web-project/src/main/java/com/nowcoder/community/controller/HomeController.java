@@ -49,7 +49,7 @@ public class HomeController {
                 discussPosts.add(map);
             }
         }
-        System.out.println(discussPosts);
+//        System.out.println(discussPosts);
         // 向页面注入数据
         model.addAttribute("discussPosts",discussPosts);
         return "index";

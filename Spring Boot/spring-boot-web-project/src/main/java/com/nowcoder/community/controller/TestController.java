@@ -56,4 +56,11 @@ public class TestController {
         System.out.println(session.getAttribute("name"));
         return "Get Session";
     }
+
+    // ajax 示例
+    @GetMapping("/ajaxTest")
+    @ResponseBody
+    public String ajaxTest() {
+        return CommunityUtil.getJsonString(0,"获取成功");
+    }
 }

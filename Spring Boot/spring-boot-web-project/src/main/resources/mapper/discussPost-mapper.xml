@@ -8,6 +8,10 @@
         id, user_id, title, content, type, status, create_time, comment_count, score
     </sql>
 
+    <sql id="insertFields">
+        user_id, title, content, type, status, create_time, comment_count, score
+    </sql>
+
     <!--  编写查询sql 并声明返回的数据类型  -->
     <!--  if 判断有没有传用户id 当存在 则加到sql中去  -->
     <!-- #{userId} 代表的是使用声明的参数   -->
@@ -29,5 +33,18 @@
         <if test="userId!=0">
             and user_id = #{userId}
         </if>
+    </select>
+
+    <!--  添加帖子  -->
+    <select id="insertDiscussPost" resultType="java.lang.Integer">
+        insert into discuss_post(<include refid="insertFields"></include>)
+        values(#{userId},#{title},#{content},#{type},#{status},#{createTime},#{commentCount},#{score})
+    </select>
+
+    <!--  通过id获取帖子详情  -->
+    <select id="selectDiscussPostById" resultType="DiscussPost">
+        select <include refid="selectFields"></include>
+        from discuss_post
+        where id = #{id}
     </select>
 </mapper>
