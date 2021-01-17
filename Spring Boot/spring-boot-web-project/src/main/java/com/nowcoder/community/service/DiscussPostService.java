@@ -71,4 +71,14 @@ public class DiscussPostService {
     public DiscussPost findDiscussPostById(int id) {
         return discussPostMapper.selectDiscussPostById(id);
     }
+
+    /**
+     * 更新 帖子的 回复个数
+     * @param id    帖子id
+     * @param count     回复个数
+     * @return      影响行数
+     */
+    public int updateCommentCount(int id, int count) {
+        return discussPostMapper.updateCommentCount(id, count);
+    }
 }

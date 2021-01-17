@@ -21,10 +21,8 @@ import java.util.Random;
 
 @Service
 public class UserService implements CommunityConstant {
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
-    @Autowired
     private LoginTicketMapper loginTicketMapper;
 
     @Autowired
@@ -38,6 +36,16 @@ public class UserService implements CommunityConstant {
 
     @Value("${server.servlet.context-path}")
     private String contextPath;
+
+    public UserService(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
+
+    @Autowired
+    public UserService(UserMapper userMapper, LoginTicketMapper loginTicketMapper) {
+        this.userMapper = userMapper;
+        this.loginTicketMapper = loginTicketMapper;
+    }
 
     /***
      * 根据用户id 获取用户信息
