@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,8 +82,15 @@ public class MessageController {
         model.addAttribute("letters",letters);
         // 获取私信目标
         model.addAttribute("target",getLetterTarget(conversationId));
+
+        // 设置已读
+        List<Integer> ids = getLetterIds(letterList);
+        if(!ids.isEmpty()) {
+            messageService.readMessage(ids);
+        }
         return "/site/letter-detail";
     }
+
 
     /**
      * 获取 私信目标
@@ -100,5 +108,19 @@ public class MessageController {
         }else {
             return userService.findUserById(id0);
         }
+    }
+
+    // 从消息列表里提取未读消息 id集合
+    private List<Integer> getLetterIds(List<Message> letterList) {
+        List<Integer> ids = new ArrayList<>();
+        if(ids != null) {
+            for (Message message : letterList){
+                // 判断当前登录的是接收者
+                if(hostHolder.getUser().getId() == message.getToId() && message.getStatus() == 0){
+                    ids.add(message.getId());
+                }
+            }
+        }
+        return ids;
     }
 }
