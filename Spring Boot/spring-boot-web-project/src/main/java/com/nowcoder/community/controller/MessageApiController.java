@@ -40,6 +40,9 @@ public class MessageApiController extends ApiController {
      */
     @PostMapping("/letter/send")
     public ApiResult sendLetter(String toName, String content) {
+//        // 模拟 500 报错
+//        Integer.valueOf("abb");
+
         User target = userService.findUserByName(toName);
         if(target == null ){
             return Error("目标用户不存在");

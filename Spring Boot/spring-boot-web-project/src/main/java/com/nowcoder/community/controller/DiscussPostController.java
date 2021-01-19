@@ -36,6 +36,8 @@ public class DiscussPostController implements CommunityConstant {
 
     @GetMapping("/detail/{discussPostId}")
     public String getDiscussPost(@PathVariable("discussPostId") int discussPostId, Model model, Page page) {
+        // 模拟500报错
+//        Integer.valueOf("aaa");
         // 帖子
         DiscussPost discussPost =  discussPostService.findDiscussPostById(discussPostId);
         // 作者
