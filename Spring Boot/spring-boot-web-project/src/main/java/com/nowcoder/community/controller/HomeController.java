@@ -4,7 +4,9 @@ import com.nowcoder.community.entity.DiscussPost;
 import com.nowcoder.community.entity.Page;
 import com.nowcoder.community.entity.User;
 import com.nowcoder.community.service.DiscussPostService;
+import com.nowcoder.community.service.LikeService;
 import com.nowcoder.community.service.UserService;
+import com.nowcoder.community.util.CommunityConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,13 +18,16 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-public class HomeController {
+public class HomeController implements CommunityConstant {
     // 注入service
-    @Autowired
-    private DiscussPostService discussPostService;
-
-    @Autowired
-    private UserService userService;
+    private final LikeService likeService;
+    private final DiscussPostService discussPostService;
+    private final UserService userService;
+    public HomeController(DiscussPostService discussPostService, UserService userService, LikeService likeService) {
+        this.discussPostService = discussPostService;
+        this.userService = userService;
+        this.likeService = likeService;
+    }
 
     @GetMapping("/index")
     public String getIndexPage(Model model,Page page) {
@@ -46,6 +51,9 @@ public class HomeController {
                 map.put("post",post);
                 User user = userService.findUserById(post.getUserId());
                 map.put("user",user);
+                // 点赞量
+                long likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_POST, post.getId());
+                map.put("likeCount",likeCount);
                 discussPosts.add(map);
             }
         }

@@ -2,6 +2,7 @@ package com.nowcoder.community.controller;
 
 import com.nowcoder.community.annotation.LoginRequired;
 import com.nowcoder.community.entity.User;
+import com.nowcoder.community.service.LikeService;
 import com.nowcoder.community.service.UserService;
 import com.nowcoder.community.util.CommunityUtil;
 import com.nowcoder.community.util.HostHolder;
@@ -37,11 +38,16 @@ public class UserController {
     @Value("${server.servlet.context-path}")
     private String contextPath;
 
-    @Autowired
-    private HostHolder hostHolder;
+    private final LikeService likeService;
+    private final HostHolder hostHolder;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserController(HostHolder hostHolder, UserService userService, LikeService likeService) {
+        this.hostHolder = hostHolder;
+        this.userService = userService;
+        this.likeService = likeService;
+    }
 
     @LoginRequired
     @GetMapping("/setting")
@@ -111,5 +117,25 @@ public class UserController {
         } catch (IOException e) {
             logger.error("读取文件失败：  ",e.getMessage());
         }
+    }
+
+    /**
+     * 用户信息页
+     * @param userId    用户id
+     * @param model     模型
+     * @return
+     */
+    @GetMapping("/profile/{userId}")
+    public String getProfilePage(@PathVariable("userId") int userId, Model model) {
+        User user = userService.findUserById(userId);
+        if(user == null) {
+            throw new RuntimeException("该用户不存在");
+        }
+        // 点赞数量
+        int likeCount = likeService.findUserLikeCount(userId);
+        // 用户
+        model.addAttribute("user",user);
+        model.addAttribute("likeCount",likeCount);
+        return "/site/profile";
     }
 }
