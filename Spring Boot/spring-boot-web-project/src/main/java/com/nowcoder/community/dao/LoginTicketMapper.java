@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.*;
  * 登录凭证接口 编写用户对登录凭证操作的行为 在service层中实现
  */
 @Mapper
+@Deprecated  // 由redis接管 使用@Deprecated 注释 代表不推荐使用
 public interface LoginTicketMapper {
     @Insert({
         "insert into login_ticket(user_id,ticket,status,expired) ",
