@@ -3,6 +3,7 @@ package com.nowcoder.community.config;
 import com.nowcoder.community.controller.interceptor.AlphaInterceptor;
 import com.nowcoder.community.controller.interceptor.LoginRequiredInterceptor;
 import com.nowcoder.community.controller.interceptor.LoginTicketInterceptor;
+import com.nowcoder.community.controller.interceptor.MessageInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -15,16 +16,25 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcController implements WebMvcConfigurer {
 
     // 将我们声明的过滤器注入进来
-    @Autowired
-    private AlphaInterceptor alphaInterceptor;
+    private final AlphaInterceptor alphaInterceptor;
 
     // 注入登录校验拦截器
-    @Autowired
-    private LoginTicketInterceptor loginTicketInterceptor;
+    private final LoginTicketInterceptor loginTicketInterceptor;
 
     // 注入鉴权拦截器
-    @Autowired
-    private LoginRequiredInterceptor loginRequiredInterceptor;
+    private final LoginRequiredInterceptor loginRequiredInterceptor;
+
+    // 注入消息拦截器
+    private final MessageInterceptor messageInterceptor;
+
+    public WebMvcController(AlphaInterceptor alphaInterceptor, LoginTicketInterceptor loginTicketInterceptor,
+                            LoginRequiredInterceptor loginRequiredInterceptor, MessageInterceptor messageInterceptor) {
+        this.alphaInterceptor = alphaInterceptor;
+        this.loginTicketInterceptor = loginTicketInterceptor;
+        this.loginRequiredInterceptor = loginRequiredInterceptor;
+        this.messageInterceptor = messageInterceptor;
+    }
+
 
     // 重写 注册拦截器方法
     @Override
@@ -46,6 +56,11 @@ public class WebMvcController implements WebMvcConfigurer {
 
         // 新增一个鉴权的拦截器
         registry.addInterceptor(loginRequiredInterceptor).excludePathPatterns(
+                "/*/*.css","/*/*.js","/*/*.jpg","/*/*.png","/*/*.jpeg"
+        );
+
+        // 新增一个消息的拦截器
+        registry.addInterceptor(messageInterceptor).excludePathPatterns(
                 "/*/*.css","/*/*.js","/*/*.jpg","/*/*.png","/*/*.jpeg"
         );
     }

@@ -1,8 +1,11 @@
 package com.nowcoder.community.controller;
 
 import com.nowcoder.community.data.ApiResult;
+import com.nowcoder.community.entity.Event;
 import com.nowcoder.community.entity.User;
+import com.nowcoder.community.event.EventProducer;
 import com.nowcoder.community.service.FollowService;
+import com.nowcoder.community.util.CommunityConstant;
 import com.nowcoder.community.util.HostHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,14 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
  * 关注
  */
 @RestController
-public class FollowApiController extends ApiController {
+public class FollowApiController extends ApiController implements CommunityConstant {
     private final FollowService followService;
-
     private final HostHolder hostHolder;
+    private final EventProducer eventProducer;
 
-    public FollowApiController(FollowService followService, HostHolder hostHolder) {
+    public FollowApiController(FollowService followService, HostHolder hostHolder, EventProducer eventProducer) {
         this.followService = followService;
         this.hostHolder = hostHolder;
+        this.eventProducer = eventProducer;
     }
 
     /**
@@ -36,6 +40,14 @@ public class FollowApiController extends ApiController {
             return Error("请先登录");
         }
         followService.follow(user.getId(), entityType, entityId);
+        // 触发关注事件
+        Event event = new Event()
+                .setTopic(TOPIC_FOLLOW)
+                .setUserId(hostHolder.getUser().getId())
+                .setEntityType(entityType)
+                .setEntityId(entityId)
+                .setEntityUserId(entityId);
+        eventProducer.fireEvent(event);
         return Successed("关注成功");
     }
 
