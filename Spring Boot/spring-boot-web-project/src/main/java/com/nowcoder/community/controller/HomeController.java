@@ -62,6 +62,10 @@ public class HomeController implements CommunityConstant {
         model.addAttribute("discussPosts",discussPosts);
         return "index";
     }
-
+    // 没有权限时的提示页面
+    @GetMapping("/denied")
+    public String getDeniedPage() {
+        return "/error/404";
+    }
 
 }

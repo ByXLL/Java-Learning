@@ -42,8 +42,8 @@ public class MessageController implements CommunityConstant {
         page.setRows(messageService.findConversationCount(user.getId()));
         // 会话列表
         List<Message> conversationList = messageService.findConversations(user.getId(), page.getOffset(),page.getLimit());
-        List<Map<String,Object>> conversations = new ArrayList<>();
-        if(conversations != null) {
+        if(conversationList != null) {
+            List<Map<String,Object>> conversations = new ArrayList<>();
             for (Message message:conversationList) {
                 Map<String, Object> item = new HashMap<>();
                 item.put("conversation",message);
@@ -53,8 +53,8 @@ public class MessageController implements CommunityConstant {
                 item.put("target",userService.findUserById(targetId));
                 conversations.add(item);
             }
+            model.addAttribute("conversations",conversations);
         }
-        model.addAttribute("conversations",conversations);
         // 查询未读消息数量
         int letterUnreadCount = messageService.findLetterUnreadCount(user.getId(), null);
         model.addAttribute("letterUnreadCount",letterUnreadCount);
@@ -71,16 +71,16 @@ public class MessageController implements CommunityConstant {
         // 私信列表
         messageService.findLetters(conversationId, page.getOffset(), page.getLimit());
         List<Message> letterList = messageService.findLetters(conversationId, page.getOffset(), page.getLimit());
-        List<Map<String,Object>> letters = new ArrayList<>();
         if(letterList != null) {
+            List<Map<String,Object>> letters = new ArrayList<>();
             for (Message message : letterList) {
                 Map<String,Object> map = new HashMap<>();
                 map.put("letter",message);
                 map.put("fromUser",userService.findUserById(message.getFromId()));
                 letters.add(map);
             }
+            model.addAttribute("letters",letters);
         }
-        model.addAttribute("letters",letters);
         // 获取私信目标
         model.addAttribute("target",getLetterTarget(conversationId));
 

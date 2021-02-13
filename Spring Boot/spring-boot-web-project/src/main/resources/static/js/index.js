@@ -1,5 +1,14 @@
 $(function(){
 	$("#publishBtn").click(publish);
+
+	// 获取 csrf 值
+	var token = $("#_csrf").attr("content")
+	var tokenHeader = $("#_csrf_header").attr("content")
+
+	// 设置请求头
+	$.ajaxSetup({
+		header:{tokenHeader:token}
+	});
 });
 
 function publish() {
@@ -8,6 +17,7 @@ function publish() {
 	// 获取标题和内容
 	var title = $("#recipient-name").val();
 	var content = $("#message-text").val();
+
 	// 发送异步请求(POST)
 	$.post(
 		CONTEXT_PATH + "/discuss/add",

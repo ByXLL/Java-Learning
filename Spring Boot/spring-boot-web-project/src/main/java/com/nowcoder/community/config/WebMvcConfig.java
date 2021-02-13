@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * mvc 的配置类  去实现 WebMvcController
  */
 @Configuration
-public class WebMvcController implements WebMvcConfigurer {
+public class WebMvcConfig implements WebMvcConfigurer {
 
     // 将我们声明的过滤器注入进来
     private final AlphaInterceptor alphaInterceptor;
@@ -21,17 +21,17 @@ public class WebMvcController implements WebMvcConfigurer {
     // 注入登录校验拦截器
     private final LoginTicketInterceptor loginTicketInterceptor;
 
-    // 注入鉴权拦截器
-    private final LoginRequiredInterceptor loginRequiredInterceptor;
+//    // 注入鉴权拦截器
+//    private final LoginRequiredInterceptor loginRequiredInterceptor;
 
     // 注入消息拦截器
     private final MessageInterceptor messageInterceptor;
 
-    public WebMvcController(AlphaInterceptor alphaInterceptor, LoginTicketInterceptor loginTicketInterceptor,
-                            LoginRequiredInterceptor loginRequiredInterceptor, MessageInterceptor messageInterceptor) {
+    public WebMvcConfig(AlphaInterceptor alphaInterceptor, LoginTicketInterceptor loginTicketInterceptor,
+                        MessageInterceptor messageInterceptor) {
         this.alphaInterceptor = alphaInterceptor;
         this.loginTicketInterceptor = loginTicketInterceptor;
-        this.loginRequiredInterceptor = loginRequiredInterceptor;
+//        this.loginRequiredInterceptor = loginRequiredInterceptor;
         this.messageInterceptor = messageInterceptor;
     }
 
@@ -54,10 +54,10 @@ public class WebMvcController implements WebMvcConfigurer {
             "/*/*.css","/*/*.js","/*/*.jpg","/*/*.png","/*/*.jpeg"
         );
 
-        // 新增一个鉴权的拦截器
-        registry.addInterceptor(loginRequiredInterceptor).excludePathPatterns(
-                "/*/*.css","/*/*.js","/*/*.jpg","/*/*.png","/*/*.jpeg"
-        );
+//        // 新增一个鉴权的拦截器
+//        registry.addInterceptor(loginRequiredInterceptor).excludePathPatterns(
+//                "/*/*.css","/*/*.js","/*/*.jpg","/*/*.png","/*/*.jpeg"
+//        );
 
         // 新增一个消息的拦截器
         registry.addInterceptor(messageInterceptor).excludePathPatterns(
