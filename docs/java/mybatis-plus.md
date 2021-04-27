@@ -73,6 +73,41 @@ public interface UserMapper extends BaseMapper<User> {
      */
 }
 
+
+```
+
+### 5、声明`mapper-locations`路径
+
+``` properties
+# 在 properties 文件中设置mapper-locations的路径
+mybatis-plus.mapper-locations=classpath:/com/mybatisplus/demo/mapper/xml/*Mapper.xml
+```
+
+### 6、在`pom`文件中声明 `resources`
+
+``` xml
+<build>
+    <resources>
+        <resource>
+            <!-- xml放在java目录下-->
+            <directory>src/main/java</directory>
+            <includes>
+                <include>**/*.properties</include>
+                <include>**/*.xml</include>
+            </includes>
+            <filtering>false</filtering>
+        </resource>
+        <!--指定资源的位置（xml放在resources下，可以不用指定）-->
+        <resource>
+            <directory>src/main/resources</directory>
+            <includes>
+                <include>**/*.properties</include>
+                <include>**/*.xml</include>
+            </includes>
+            <filtering>false</filtering>
+        </resource>
+    </resources>
+</build>
 ```
 
 

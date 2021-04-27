@@ -5,6 +5,7 @@ import com.mybatisplus.demo.entity.Goods;
 import com.mybatisplus.demo.entity.User;
 import com.mybatisplus.demo.mapper.GoodsMapper;
 import com.mybatisplus.demo.mapper.UserMapper;
+import com.mybatisplus.demo.vo.UserVO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -74,5 +75,11 @@ public class WrapperTest {
     void selectGoods() {
         List<Goods> goodsList = goodsMapper.selectList(null);
         goodsList.forEach(System.out::println);
+    }
+
+    @Test
+    void testMySelect() {
+        List<UserVO> userVOList = userMapper.mySelectUserList();
+        userVOList.forEach(System.out::println);
     }
 }
