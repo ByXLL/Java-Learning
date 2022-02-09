@@ -1,0 +1,23 @@
+server:
+  port: 10001
+spring:
+  application:
+    name: redis-demo
+#  redis:
+#    host: 127.0.0.1
+#    port: 6379
+#    password:
+#    jedis:
+#      pool:
+#        max-active: 8
+#        max-idle: 8
+#        min-idle: 0
+  redis:
+    cluster:
+      nodes:
+      - 192.168.100.100:7001
+      - 192.168.100.100:7002
+      - 192.168.100.100:7003
+      - 192.168.100.100:7004
+      - 192.168.100.100:7005
+      - 192.168.100.100:7006
