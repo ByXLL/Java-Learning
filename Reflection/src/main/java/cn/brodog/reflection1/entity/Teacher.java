@@ -1,4 +1,4 @@
-package com.brodog.entity;
+package cn.brodog.reflection1.entity;
 
 /**
  * 老师类

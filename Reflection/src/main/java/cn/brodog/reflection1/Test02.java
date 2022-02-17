@@ -1,7 +1,7 @@
-package com.brodog;
+package cn.brodog.reflection1;
 
-import com.brodog.entity.Person;
-import com.brodog.entity.Student;
+import cn.brodog.reflection1.entity.Person;
+import cn.brodog.reflection1.entity.Student;
 
 /**
  * 测试Class类的创建方式
@@ -19,7 +19,7 @@ public class Test02 {
 
 
         // 方式二：通过Class.forname()获得
-        Class c2 = Class.forName("com.brodog.entity.Student");
+        Class c2 = Class.forName("cn.brodog.reflection1.entity.Student");
         System.out.println(c2.hashCode());
 
 

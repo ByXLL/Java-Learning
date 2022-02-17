@@ -1,4 +1,4 @@
-package com.brodog.entity;
+package cn.brodog.reflection2.entity;
 
 /**
  * 实体类
@@ -6,7 +6,12 @@ package com.brodog.entity;
  */
 public class Person {
     public String name;
-    public int age;
+    private int age;
+
+    public String a;
+    protected String b;
+    String c;
+    private String d;
 
     public Person() {
     }
