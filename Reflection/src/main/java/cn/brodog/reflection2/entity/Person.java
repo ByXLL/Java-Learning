@@ -37,8 +37,20 @@ public class Person {
         this.age = age;
     }
 
+    public void go() {
+        System.out.println("开始走......");
+    }
+
     public void say(String msg) {
         System.out.println("说-------"+msg);
+    }
+
+    public Person getMe() {
+        return this;
+    }
+
+    private void test() {
+        System.out.println("测试");
     }
 
     @Override
