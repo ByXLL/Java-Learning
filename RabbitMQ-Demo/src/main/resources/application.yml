@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: rabbitmq-demo
+  rabbitmq:
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    addresses: 127.0.0.1

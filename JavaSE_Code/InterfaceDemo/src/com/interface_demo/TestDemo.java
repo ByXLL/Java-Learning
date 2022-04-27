@@ -1,13 +1,15 @@
 package com.interface_demo;
 
+import java.lang.ref.PhantomReference;
+import java.lang.ref.ReferenceQueue;
+import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
+import java.util.Hashtable;
+
 public class TestDemo {
     public static void main(String[] args) {
-        // 接口的实例化 参照 抽象实例化
-        Jumpping cat = new Cat();
-        cat.jump();
-
-
-        Jumpping dog = new Dog();
-        dog.jump();
+        ReferenceQueue<String> queue = new ReferenceQueue<>();
+        PhantomReference<String> str = new PhantomReference<String>("abc", queue);
+        System.out.println(str.get());
     }
 }
