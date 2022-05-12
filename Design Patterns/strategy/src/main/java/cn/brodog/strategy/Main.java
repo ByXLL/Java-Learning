@@ -3,6 +3,7 @@ package cn.brodog.strategy;
 import java.util.Arrays;
 
 /**
+ * 策略模式
  * 需求：编写一个排序类，排序的参数可能是 int数组、double数组、、、、、甚至是一个类数组
  * 按照以前的写法，就是在排序类上去重载 sort方法，但这不合实际
  *
