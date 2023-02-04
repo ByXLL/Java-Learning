@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mali.travelstrategy.mapper.RaidersCommentMapper">
+    <select id="selectRaidersCommentDetails" resultType="com.mali.travelstrategy.vo.RaidersCommentVO">
+        select rc.*,user.nick_name, user.avatar, ra.title, ra.author
+        from raiders_comment as rc
+            inner join user on user.id = rc.user_id
+            inner join raiders as ra on ra.id = rc.raiders_id
+        where 1 = 1
+        <if test="ew != null">
+            <if test="!ew.emptyOfWhere"> AND </if>
+            ${ew.sqlSegment}
+        </if>
+    </select>
+</mapper>

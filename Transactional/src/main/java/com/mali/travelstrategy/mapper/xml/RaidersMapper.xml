@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mali.travelstrategy.mapper.RaidersMapper">
+    <select id="selectRaidersDetails" resultType="com.mali.travelstrategy.vo.RaidersDetailsVO">
+        select (
+            select count(1)
+            from raiders_stat as rs
+            where rs.raiders_id = raiders.id
+        ) as `start_count`, raiders .*, user.avatar
+        from raiders inner join user on author_id = user.id
+        where 1 = 1
+        <if test="ew != null">
+            <if test="!ew.emptyOfWhere">
+                AND
+            </if>
+            ${ew.sqlSegment}
+        </if>
+    </select>
+
+    <select id="findStatListByRaidersId" resultType="com.mali.travelstrategy.vo.RaidersStatVo">
+        select rs.*, user.avatar, user.nick_name from raiders_stat as rs
+            inner join user on user.id = rs.user_id
+        where rs.raiders_id = #{raidersId}
+    </select>
+</mapper>

@@ -32,7 +32,12 @@ public class Main {
          * 并去实现 Comparator 接口 ，编写自己需要的比较策略
          */
 
-        System.out.println(Arrays.toString(cats));
+//        System.out.println(Arrays.toString(cats));
 
+
+        Man[] mans = {new Man(180, 80), new Man(175, 65), new Man(195, 90)};
+        Sorter1<Man> manSorter = new Sorter1<Man>();
+        manSorter.sort(mans, new ManHeightComparator());
+        System.out.println(Arrays.toString(mans));
     }
 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mali.travelstrategy.mapper.UserAttentionMapper">
+
+<!--    <select id="selectWatchingUsers" resultType="com.mali.travelstrategy.vo.UserAttentionVO">-->
+<!--        select user.id as user_id, ut.id as ut_id,user.user_name, user.nick_name, user.avatar, user.age, user.city, user.sex, user.introduction, ut.create_time-->
+<!--        from user_attention as ut inner join user on user.id = ut.target_user_id and ut.user_id = #userId-->
+<!--    </select>-->
+
+<select id="selectWatchingUsers" resultType="java.lang.Object">
+    select user.id as user_id, ut.id as ut_id,user.user_name, user.nick_name, user.avatar, user.age, user.city, user.sex, user.introduction, ut.create_time
+    from user_attention as ut inner join user on user.id = ut.target_user_id and ut.user_id = #{userId}
+    </select>
+</mapper>
