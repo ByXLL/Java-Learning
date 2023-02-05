@@ -1,5 +1,6 @@
 package com.brodog.springframework.factory.support;
 
+import com.brodog.springframework.BeansException;
 import com.brodog.springframework.factory.config.BeanDefinition;
 import com.brodog.springframework.factory.config.InstantiationStrategy;
 
@@ -34,7 +35,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
             // 无参直接反射创建实例
             return beanClass.newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
+            throw new BeansException("Failed to instantiate [" + beanClass.getName() + "]", e);
         }
     }
 }

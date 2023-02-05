@@ -25,8 +25,18 @@ public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFac
      */
     @Override
     protected Object createBeanObject(String beanName, BeanDefinition beanDefinition) {
+        Object beanObject = null;
         // 通过 定义好的创建bean策略进程beanObject的创建
-        return createBeanObjectInstance(beanName, beanDefinition, null);
+        try {
+            beanObject = createBeanObjectInstance(beanName, beanDefinition, new Object[]{});
+        } catch (Exception e) {
+            throw new BeansException("Instantiation of bean failed", e);
+        }
+
+        // 创建完bean的实例对象后 注册单例bean信息
+        registerSingleBean(beanName, beanDefinition);
+
+        return beanObject;
     }
 
     /**
@@ -39,8 +49,18 @@ public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFac
      */
     @Override
     protected Object createBeanObject(String beanName, BeanDefinition beanDefinition, Object[] args) {
+        Object beanObject = null;
         // 通过 定义好的创建bean策略进程beanObject的创建
-        return createBeanObjectInstance(beanName, beanDefinition, args);
+        try {
+            beanObject = createBeanObjectInstance(beanName, beanDefinition, args);
+        } catch (Exception e) {
+            throw new BeansException("Instantiation of bean failed", e);
+        }
+
+        // 创建完bean的实例对象后 注册单例bean信息
+        registerSingleBean(beanName, beanDefinition);
+
+        return beanObject;
     }
 
     public InstantiationStrategy getInstantiationStrategy() {
@@ -63,6 +83,9 @@ public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFac
         Class beanClass = beanDefinition.getBeanClass();
         // 拿到当前Class的所有的构造参数
         Constructor[] declaredConstructors = beanClass.getDeclaredConstructors();
+        if(Objects.isNull(args)) {
+            return getInstantiationStrategy().instantiate(beanName, beanDefinition, null, args);
+        }
         for (Constructor declaredConstructor : declaredConstructors) {
             // 这里简单通过判断当前构造方法的参数个数与传进来的参数匹配 则代表使用当前这个构造方法进行创建 （真实方案还得通过判断每个参数的类型）
             if(Objects.nonNull(args) && declaredConstructor.getParameterTypes().length == args.length) {

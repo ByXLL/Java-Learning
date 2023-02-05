@@ -21,16 +21,7 @@ public abstract class AbstractBeanFactory extends DefaultSingleBeanRegistry impl
      */
     @Override
     public Object getBean(String beanName) throws BeansException {
-        // 通过beanName获取单例bean的Object对象 用的是DefaultSingleBeanRegistry中定义的 getSingletonBeanObject
-        Object singletonBeanObject = getSingletonBeanObject(beanName);
-        // 如果不存在则创建该bean的Object对象
-        if(Objects.isNull(singletonBeanObject)) {
-            // 先通过子类实现的 getBeanDefinition 抽象方法获取bean的定义信息
-            BeanDefinition beanDefinition = getBeanDefinition(beanName);
-            // 再创建单例的beanObject
-            return createBeanObject(beanName, beanDefinition);
-        }
-        return singletonBeanObject;
+        return doGetBean(beanName, null);
     }
 
     /**
@@ -41,7 +32,7 @@ public abstract class AbstractBeanFactory extends DefaultSingleBeanRegistry impl
      */
     @Override
     public Object getBean(String beanName, Object... args) throws BeansException {
-        return null;
+        return doGetBean(beanName, args);
     }
 
     /**
@@ -70,4 +61,23 @@ public abstract class AbstractBeanFactory extends DefaultSingleBeanRegistry impl
      * @return
      */
     protected abstract Object createBeanObject(String beanName, BeanDefinition beanDefinition, Object[] args);
+
+    /**
+     * 获取beanObject 当不存在的时候则进行创建
+     * @param beanName  beanName
+     * @param args  可变参数
+     * @return
+     */
+    private Object doGetBean(String beanName, Object[] args) {
+        // 通过beanName获取单例bean的Object对象 用的是DefaultSingleBeanRegistry中定义的 getSingletonBeanObject
+        Object singletonBeanObject = getSingletonBeanObject(beanName);
+        // 如果不存在则创建该bean的Object对象
+        if(Objects.isNull(singletonBeanObject)) {
+            // 先通过子类实现的 getBeanDefinition 抽象方法获取bean的定义信息
+            BeanDefinition beanDefinition = getBeanDefinition(beanName);
+            // 再创建单例的beanObject
+            return createBeanObject(beanName, beanDefinition, args);
+        }
+        return singletonBeanObject;
+    }
 }

@@ -1,8 +1,10 @@
 package com.brodog.springframework.factory.support;
 
+import com.brodog.springframework.BeansException;
 import com.brodog.springframework.factory.config.BeanDefinition;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -26,7 +28,11 @@ public class DefaultListableBeanFactory extends AbstractAutoWireCapableBeanFacto
      */
     @Override
     protected BeanDefinition getBeanDefinition(String beanName) {
-        return beanDefinitionMap.get(beanName);
+        BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
+        if(Objects.isNull(beanDefinition)) {
+            throw new BeansException("No bean named '" + beanName + "' is defined");
+        }
+        return beanDefinition;
     }
 
     /**
