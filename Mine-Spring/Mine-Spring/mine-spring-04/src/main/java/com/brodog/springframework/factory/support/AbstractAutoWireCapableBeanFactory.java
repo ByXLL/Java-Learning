@@ -1,10 +1,15 @@
 package com.brodog.springframework.factory.support;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.brodog.springframework.BeansException;
+import com.brodog.springframework.factory.PropertyValue;
+import com.brodog.springframework.factory.PropertyValues;
 import com.brodog.springframework.factory.config.BeanDefinition;
+import com.brodog.springframework.factory.config.BeanReference;
 import com.brodog.springframework.factory.config.InstantiationStrategy;
 
 import java.lang.reflect.Constructor;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -15,30 +20,6 @@ import java.util.Objects;
  */
 public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFactory{
     private InstantiationStrategy instantiationStrategy = new CglibSubclassingInstantiationStrategy();
-
-    /**
-     * 创建beanObject
-     * AbstractBeanFactory 重写 createBeanObject方法 用于在这一层 单独把bean创建的能力进行实现
-     * @param beanName  beanName
-     * @param beanDefinition    beanDefinition
-     * @return
-     */
-    @Override
-    protected Object createBeanObject(String beanName, BeanDefinition beanDefinition) {
-        Object beanObject = null;
-        // 通过 定义好的创建bean策略进程beanObject的创建
-        try {
-            beanObject = createBeanObjectInstance(beanName, beanDefinition, new Object[]{});
-        } catch (Exception e) {
-            throw new BeansException("Instantiation of bean failed", e);
-        }
-
-        // 创建完bean的实例对象后 注册单例bean信息
-        registerSingleBean(beanName, beanDefinition);
-
-        return beanObject;
-    }
-
     /**
      * 创建 beanObject 实例对象
      * 抽象方法 等待下面的子类进行实现 提供给 当前类内部的 getBean()
@@ -49,22 +30,22 @@ public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFac
      */
     @Override
     protected Object createBeanObject(String beanName, BeanDefinition beanDefinition, Object[] args) {
+        // 创建beanObject的实例
         Object beanObject = null;
-        // 通过 定义好的创建bean策略进程beanObject的创建
         try {
             beanObject = createBeanObjectInstance(beanName, beanDefinition, args);
         } catch (Exception e) {
             throw new BeansException("Instantiation of bean failed", e);
         }
-
-        // 创建完bean的实例对象后 注册单例bean信息
-        registerSingleBean(beanName, beanDefinition);
-
+        // 进行属性填充
+        applyPropertyValues(beanName, beanDefinition, beanObject);
+        // 创建完成bean的实例对象后 注册单例bean信息
+        registerSingletonBean(beanName, beanObject);
         return beanObject;
     }
 
     public InstantiationStrategy getInstantiationStrategy() {
-        return this.instantiationStrategy;
+        return instantiationStrategy;
     }
 
     public void setInstantiationStrategy(InstantiationStrategy instantiationStrategy) {
@@ -81,19 +62,46 @@ public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFac
     private Object createBeanObjectInstance(String beanName, BeanDefinition beanDefinition, Object[] args) {
         Constructor constructor = null;
         Class beanClass = beanDefinition.getBeanClass();
-        // 拿到当前Class的所有的构造参数
         Constructor[] declaredConstructors = beanClass.getDeclaredConstructors();
-        if(Objects.isNull(args)) {
-            return getInstantiationStrategy().instantiate(beanName, beanDefinition, null, args);
+        if(Objects.isNull(args) || args.length == 0) {
+            return getInstantiationStrategy().instantiate(beanName, beanDefinition, constructor, args);
         }
         for (Constructor declaredConstructor : declaredConstructors) {
             // 这里简单通过判断当前构造方法的参数个数与传进来的参数匹配 则代表使用当前这个构造方法进行创建 （真实方案还得通过判断每个参数的类型）
-            if(Objects.nonNull(args) && declaredConstructor.getParameterTypes().length == args.length) {
+            if(declaredConstructor.getParameterTypes().length == args.length) {
                 constructor = declaredConstructor;
                 break;
             }
         }
-        // 通过具体实例的策略 进行实例化
         return getInstantiationStrategy().instantiate(beanName, beanDefinition, constructor, args);
+    }
+
+    /**
+     * 属性绑定
+     * @param beanName          beanName
+     * @param beanDefinition    beanDefinition
+     * @param beanObject        beanObject
+     */
+    private void applyPropertyValues(String beanName, BeanDefinition beanDefinition, Object beanObject) {
+        try {
+            PropertyValues propertyValues =  beanDefinition.getPropertyValues();
+            for (PropertyValue propertyValue : propertyValues.getPropertyValues()) {
+                String propertyValueName = propertyValue.getName();
+                Object propertyValueValue = propertyValue.getValue();
+
+                // 如果当前这个属性也是一个引用bean对象  A引用了B
+                if(propertyValueValue instanceof BeanReference) {
+                    // 拿到当前引用的这个类的引用信息
+                    BeanReference beanReference = (BeanReference) propertyValueValue;
+                    // 通过beanName获取到实例
+                    propertyValueValue = getBean(beanReference.getBeanName());
+                }
+
+                // 属性填充
+                BeanUtil.setFieldValue(beanObject, propertyValueName, propertyValueValue);
+            }
+        }catch (Exception e) {
+            throw new BeansException("Error setting property values：" + beanName);
+        }
     }
 }
