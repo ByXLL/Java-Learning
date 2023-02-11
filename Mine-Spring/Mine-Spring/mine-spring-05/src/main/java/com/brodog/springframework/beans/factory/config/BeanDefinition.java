@@ -2,6 +2,8 @@ package com.brodog.springframework.beans.factory.config;
 
 import com.brodog.springframework.beans.PropertyValues;
 
+import java.util.Objects;
+
 /**
  * Bean实例信息
  * @author By-BroDog
@@ -22,7 +24,7 @@ public class BeanDefinition {
 
     public BeanDefinition(Class beanClass, PropertyValues propertyValues) {
         this.beanClass = beanClass;
-        this.propertyValues = propertyValues;
+        this.propertyValues = Objects.nonNull(propertyValues) ? propertyValues : new PropertyValues();
     }
 
     public Class getBeanClass() {

@@ -1,10 +1,6 @@
 package com.brodog.springframework;
 
-import com.brodog.springframework.bean.GoodsService;
-import com.brodog.springframework.bean.UserDao;
-import com.brodog.springframework.bean.UserService;
-import com.brodog.springframework.beans.PropertyValue;
-import com.brodog.springframework.beans.PropertyValues;
+import com.brodog.springframework.beans.*;
 import com.brodog.springframework.beans.factory.config.BeanDefinition;
 import com.brodog.springframework.beans.factory.config.BeanReference;
 import com.brodog.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -27,7 +23,7 @@ public class ApiTest {
         reader.loadBeanDefinitions("classpath:spring.xml");
 
         // 3. 获取Bean对象调用方法
-        UserService userService = beanFactory.getBean("userService", UserService.class);
+        UserService userService = beanFactory.getBean("userService", UserService.class, "张三");
         userService.insertUser();
     }
 

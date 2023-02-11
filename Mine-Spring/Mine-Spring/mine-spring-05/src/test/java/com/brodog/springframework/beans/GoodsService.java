@@ -1,4 +1,4 @@
-package com.brodog.springframework.bean;
+package com.brodog.springframework.beans;
 
 /**
  * @author By-BroDog

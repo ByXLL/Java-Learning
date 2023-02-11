@@ -1,4 +1,4 @@
-package com.brodog.springframework.bean;
+package com.brodog.springframework.beans;
 
 /**
  * @author By-BroDog
@@ -7,6 +7,8 @@ package com.brodog.springframework.bean;
 public class UserService {
     private String userName;
 
+    private String userId;
+
     private UserDao userDao;
 
     public UserService(String userName) {
@@ -14,6 +16,7 @@ public class UserService {
     }
 
     public void insertUser() {
+        System.out.println("userId: " + userId);
         System.out.println("添加用户成功: " + userName);
     }
 
