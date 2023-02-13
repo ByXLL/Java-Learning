@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <bean id="goodsService" class="com.brodog.springframework.beans06.GoodsService"/>
+    <bean id="userDao" class="com.brodog.springframework.beans06.UserDao"/>
+    <bean id="userService" class="com.brodog.springframework.beans06.UserService">
+        <property name="userId" value="1001"/>
+        <property name="userDao" ref="userDao"/>
+    </bean>
+</beans>
