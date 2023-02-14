@@ -9,4 +9,10 @@ public interface ConfigurableBeanFactory {
     String SCOPE_SINGLETON = "singleton";
 
     String SCOPE_PROTOTYPE = "prototype";
+
+    /**
+     * 添加对象实例化之后 需要对bean进行操作的前置和后置处理的处理器
+     * @param beanPostProcessor
+     */
+    void addBeanPostProcessor(BeanPostProcessor beanPostProcessor);
 }

@@ -45,4 +45,11 @@ public interface BeanDefinitionReader {
      * @throws BeansException
      */
     void loadBeanDefinitions(String location) throws BeansException;
+
+    /**
+     * 触发加载 BeanDefinitions
+     * @param locations      所有的文件路径
+     * @throws BeansException
+     */
+    void loadBeanDefinitions(String... locations) throws BeansException;
 }
