@@ -3,7 +3,11 @@ package com.brodog.springframework.beans.factory.support;
 import com.brodog.springframework.beans.BeansException;
 import com.brodog.springframework.beans.factory.BeanFactory;
 import com.brodog.springframework.beans.factory.config.BeanDefinition;
+import com.brodog.springframework.beans.factory.config.BeanPostProcessor;
+import com.brodog.springframework.beans.factory.config.ConfigurableBeanFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -12,7 +16,8 @@ import java.util.Objects;
  * @author By-BroDog
  * @createTime 2023-02-13
  */
-public abstract class AbstractBeanFactory extends DefaultSingleBeanRegistry implements BeanFactory {
+public abstract class AbstractBeanFactory extends DefaultSingleBeanRegistry implements ConfigurableBeanFactory {
+    private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<BeanPostProcessor>();
 
     /**
      * 通过beanName获取 bean的实例对象 Object
@@ -60,6 +65,10 @@ public abstract class AbstractBeanFactory extends DefaultSingleBeanRegistry impl
     @Override
     public <T> T getBean(String beanName, Class<T> requiredType, Object... args) throws BeansException {
         return (T) doGetBean(beanName, args);
+    }
+
+    public List<BeanPostProcessor> getBeanPostProcessors() {
+        return this.beanPostProcessors;
     }
 
     /**

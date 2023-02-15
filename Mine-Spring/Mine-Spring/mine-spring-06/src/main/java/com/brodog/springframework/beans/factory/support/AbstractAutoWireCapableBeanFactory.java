@@ -4,9 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.brodog.springframework.beans.BeansException;
 import com.brodog.springframework.beans.PropertyValue;
 import com.brodog.springframework.beans.PropertyValues;
-import com.brodog.springframework.beans.factory.config.BeanDefinition;
-import com.brodog.springframework.beans.factory.config.BeanReference;
-import com.brodog.springframework.beans.factory.config.InstantiationStrategy;
+import com.brodog.springframework.beans.factory.config.*;
 
 import java.lang.reflect.Constructor;
 import java.util.Objects;
@@ -14,10 +12,11 @@ import java.util.Objects;
 /**
  * 抽象的 具有一定自动能力的 bean工厂
  * 继承自 AbstractBeanFactory 重写 createBeanObject 方法
+ * 实现AutowireCapableBeanFactory接口声明的用于调用前置和后置能力的方法
  * @author By-BroDog
  * @createTime 2023-02-13
  */
-public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFactory{
+public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFactory implements AutowireCapableBeanFactory {
     private InstantiationStrategy instantiationStrategy = new CglibSubclassingInstantiationStrategy();
 
     /**
@@ -34,15 +33,60 @@ public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFac
         // 创建实例对象的Object
         try {
             beanObject = createBeanObjectInstance(beanName, beanDefinition, args);
+
+            // 属性填充
+            applyPropertyValues(beanName, beanDefinition, beanObject);
+
+            // 执行Bean的初始化方法和BeanPostProcessor的前置和后置处理方法
+            beanObject = initializeBean(beanName, beanObject, beanDefinition);
         }catch (Exception e) {
             throw new BeansException("Instantiation of bean failed", e);
         }
 
-        // 属性填充
-        applyPropertyValues(beanName, beanDefinition, beanObject);
         // 将实例注册到单例池
         registerSingletonBean(beanName, beanObject);
         return beanObject;
+    }
+
+
+    /**
+     * 触发执行 BeanPostProcessors 接口实现类的 postProcessBeforeInitialization 前置增强方法
+     * @param beanName      beanName
+     * @param existingBean  已经创建出来的beanObject
+     * @return  经过前置增强的beanObject
+     * @throws BeansException
+     */
+    @Override
+    public Object applyBeanPostProcessorsBeforeInitialization(String beanName, Object existingBean) throws BeansException {
+        Object result = existingBean;
+        for (BeanPostProcessor processor : getBeanPostProcessors()) {
+            Object current = processor.postProcessBeforeInitialization(beanName, result);
+            if (Objects.isNull(current)) {
+                return result;
+            }
+            result = current;
+        }
+        return result;
+    }
+
+    /**
+     * 触发执行 BeanPostProcessors 接口实现类的 processorsAfterInitialization 后置增强方法
+     * @param beanName      beanName
+     * @param existingBean  已经创建出来的beanObject
+     * @return  经过后置置增强的beanObject
+     * @throws BeansException
+     */
+    @Override
+    public Object applyBeanPostProcessorsAfterInitialization(String beanName, Object existingBean) throws BeansException {
+        Object result = existingBean;
+        for (BeanPostProcessor processor : getBeanPostProcessors()) {
+            Object current = processor.postProcessAfterInitialization(beanName, result);
+            if (Objects.isNull(current)) {
+                return result;
+            }
+            result = current;
+        }
+        return result;
     }
 
     public InstantiationStrategy getInstantiationStrategy() {
@@ -105,5 +149,34 @@ public abstract class AbstractAutoWireCapableBeanFactory extends AbstractBeanFac
         }catch (Exception e) {
             throw new BeansException("Error setting property values：" + beanName);
         }
+    }
+
+    /**
+     * 初始化bean
+     * @param beanName  beanName
+     * @param beanObject    beanObject
+     * @param beanDefinition    beanDefinition
+     * @return
+     */
+    private Object initializeBean(String beanName, Object beanObject, BeanDefinition beanDefinition) {
+        // 1. 执行 BeanPostProcessor Before 处理
+        Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(beanName, beanObject);
+
+        // 待完成内容：invokeInitMethods(beanName, wrappedBean, beanDefinition);
+        invokeInitMethods(beanName, wrappedBean, beanDefinition);
+
+        // 2. 执行 BeanPostProcessor After 处理
+        wrappedBean = applyBeanPostProcessorsAfterInitialization(beanName, beanObject);
+        return wrappedBean;
+    }
+
+    /**
+     * 调用初始化方法
+     * @param beanName
+     * @param wrappedBean
+     * @param beanDefinition
+     */
+    private void invokeInitMethods(String beanName, Object wrappedBean, BeanDefinition beanDefinition) {
+
     }
 }
