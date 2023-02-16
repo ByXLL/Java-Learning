@@ -5,9 +5,12 @@ import com.brodog.springframework.beans.factory.config.BeanDefinition;
 import com.brodog.springframework.beans.factory.config.BeanReference;
 import com.brodog.springframework.beans.factory.support.DefaultListableBeanFactory;
 import com.brodog.springframework.beans.factory.xml.XmlBeanDefinitionReader;
-import com.brodog.springframework.beans06.GoodsService;
-import com.brodog.springframework.beans06.UserDao;
-import com.brodog.springframework.beans06.UserService;
+import com.brodog.springframework.context.support.ClassPathXmlApplicationContext;
+import com.brodog.springframework.test06.beans.GoodsService;
+import com.brodog.springframework.test06.beans.UserDao;
+import com.brodog.springframework.test06.beans.UserService;
+import com.brodog.springframework.test06.common.MyBeanFactoryPostProcessor;
+import com.brodog.springframework.test06.common.MyBeanPostProcessor;
 import org.junit.Test;
 
 /**
@@ -15,6 +18,39 @@ import org.junit.Test;
  * @createTime 2023-02-13
  */
 public class ApiTest {
+
+    @Test
+    public void testBeanFactoryPostProcessorAndBeanPostProcessor(){
+        // 1.初始化 BeanFactory
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+
+        // 2. 读取配置文件&注册Bean
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(beanFactory);
+        reader.loadBeanDefinitions("classpath:spring.xml");
+
+        // 3. BeanDefinition 加载完成 & Bean实例化之前，修改 BeanDefinition 的属性值
+        MyBeanFactoryPostProcessor beanFactoryPostProcessor = new MyBeanFactoryPostProcessor();
+        beanFactoryPostProcessor.postProcessBeanFactory(beanFactory);
+
+        // 4. Bean实例化之后，修改 Bean 属性信息
+        MyBeanPostProcessor beanPostProcessor = new MyBeanPostProcessor();
+        beanFactory.addBeanPostProcessor(beanPostProcessor);
+
+        // 5. 获取Bean对象调用方法
+        UserService userService = beanFactory.getBean("userService", UserService.class, "张三");
+        userService.insertUser();
+        userService.findUserName("10001");
+        System.out.println(userService);
+    }
+
+    @Test
+    public void testContext() {
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+
+        UserService userService = applicationContext.getBean("userService", UserService.class);
+        userService.insertUser();
+    }
+
     @Test
     public void testXML() {
         // 1.初始化 BeanFactory

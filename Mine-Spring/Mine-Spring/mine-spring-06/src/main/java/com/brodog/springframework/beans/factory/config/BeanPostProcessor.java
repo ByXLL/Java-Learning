@@ -4,7 +4,7 @@ import com.brodog.springframework.beans.BeansException;
 
 /**
  * 声明用于修改新实例化 Bean 对象的扩展点具备的能力
- *
+ * BeanPostProcessor是在spring容器加载了bean的定义文件并且实例化bean之后执行的
  * 在 Bean 对象实例化之后,提供了修改新实例化 Bean 对象的扩展点，也可以替换 Bean 对象。与 AOP 有着密切的关系
  * @author By-BroDog
  * @createTime 2023-02-14

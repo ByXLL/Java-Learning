@@ -34,6 +34,7 @@ public class CglibSubclassingInstantiationStrategy implements InstantiationStrat
                 return super.hashCode();
             }
         });
+        System.out.println("-------------------- "+ beanName +" 开始创建bean实例 ------------------------");
         if(Objects.isNull(constructor)) {
             return enhancer.create();
         }

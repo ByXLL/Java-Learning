@@ -80,6 +80,19 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
     }
 
     /**
+     * 触发加载 BeanDefinitions
+     *
+     * @param locations 所有的文件路径
+     * @throws BeansException
+     */
+    @Override
+    public void loadBeanDefinitions(String... locations) throws BeansException {
+        for (String location : locations) {
+            loadBeanDefinitions(location);
+        }
+    }
+
+    /**
      * 通过输入流 获取流中的信息 并创建加载 其中的BeanDefinition
      * @param inputStream
      * @throws ClassNotFoundException

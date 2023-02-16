@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
-    <bean id="goodsService" class="com.brodog.springframework.beans06.GoodsService"/>
-    <bean id="userDao" class="com.brodog.springframework.beans06.UserDao"/>
-    <bean id="userService" class="com.brodog.springframework.beans06.UserService">
+    <bean id="goodsService" class="com.brodog.springframework.test06.beans.GoodsService"/>
+    <bean id="userDao" class="com.brodog.springframework.test06.beans.UserDao"/>
+    <bean id="userService" class="com.brodog.springframework.test06.beans.UserService">
         <property name="userId" value="1001"/>
         <property name="userDao" ref="userDao"/>
+        <property name="company" value="阿里巴巴"/>
+        <property name="location" value="深圳市-南山区-深南大道"/>
     </bean>
+
+    <bean class="com.brodog.springframework.test06.common.MyBeanFactoryPostProcessor"/>
+    <bean class="com.brodog.springframework.test06.common.MyBeanPostProcessor"/>
 </beans>

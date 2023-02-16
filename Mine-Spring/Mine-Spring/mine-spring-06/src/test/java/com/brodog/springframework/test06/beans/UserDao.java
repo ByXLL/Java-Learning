@@ -1,4 +1,4 @@
-package com.brodog.springframework.beans06;
+package com.brodog.springframework.test06.beans;
 
 import java.util.HashMap;
 import java.util.Map;

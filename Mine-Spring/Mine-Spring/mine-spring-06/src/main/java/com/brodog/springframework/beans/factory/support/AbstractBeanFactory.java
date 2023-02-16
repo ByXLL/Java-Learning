@@ -67,6 +67,12 @@ public abstract class AbstractBeanFactory extends DefaultSingleBeanRegistry impl
         return (T) doGetBean(beanName, args);
     }
 
+    @Override
+    public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
+        this.beanPostProcessors.remove(beanPostProcessor);
+        this.beanPostProcessors.add(beanPostProcessor);
+    }
+
     public List<BeanPostProcessor> getBeanPostProcessors() {
         return this.beanPostProcessors;
     }

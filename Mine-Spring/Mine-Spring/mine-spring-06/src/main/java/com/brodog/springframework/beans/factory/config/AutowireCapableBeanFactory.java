@@ -5,7 +5,7 @@ import com.brodog.springframework.beans.factory.BeanFactory;
 
 /**
  * 自动的具备能力的Bean工厂
- * 生命为接口，主要声明两个方法，用于触发执行 BeanPostProcessors 接口实现类的
+ * 声明为接口，主要声明两个方法，用于触发执行 BeanPostProcessors 接口实现类的
  * postProcessBeforeInitialization前置操作和后置操作 对已经存在的beanObject进行增强操作
  * @author By-BroDog
  * @createTime 2023-02-13
