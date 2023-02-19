@@ -39,7 +39,7 @@ public class ApiTest {
         // 5. 获取Bean对象调用方法
         UserService userService = beanFactory.getBean("userService", UserService.class, "张三");
         userService.insertUser();
-        userService.findUserName("10001");
+        userService.findUserName("10002");
         System.out.println(userService);
     }
 
